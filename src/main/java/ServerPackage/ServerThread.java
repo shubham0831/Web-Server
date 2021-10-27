@@ -1,10 +1,12 @@
 package ServerPackage;
 
+import ServerPackage.ServerUtils.HTTPParser;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
 import java.io.*;
 import java.net.Socket;
+import java.util.HashMap;
 
 /**
  * Since we want multi-threading support, ie. every instance to run independent of one another we use this class,
@@ -21,14 +23,23 @@ public class ServerThread extends Thread {
     @Override
     public void run() {
         try (
-                BufferedReader inputStream = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                InputStream inputStream = socket.getInputStream();
                 OutputStream writer = socket.getOutputStream();
         ){
             //https://stackoverflow.com/questions/309424/how-do-i-read-convert-an-inputstream-into-a-string-in-java
+            HTTPParser httpParser = new HTTPParser(inputStream);
 
-            String request = inputStream.readLine();
+            String request = httpParser.getRequest();
+            HashMap<String, String> headers = httpParser.getHeader();
+            String body = httpParser.getBody();
 
-            LOGGER.info("Received request : \n" + request);
+            LOGGER.info("Server thread got request " + request);
+            LOGGER.info("Server -> request type is : " + httpParser.getRequestType());
+            LOGGER.info("Server -> request path is : " + httpParser.getRequestPath());
+            LOGGER.info("Server -> request httpVersion is : " + httpParser.getRequestHttpVersion());
+
+            httpParser.getRequestType();
+
             String tempHTML = "<html><head><title>Test App</title></head><body><h1>Test successful</h1></body></html>";
             String CRLF = "\n\r";
             String response =
