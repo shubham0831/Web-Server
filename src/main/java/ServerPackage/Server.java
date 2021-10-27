@@ -31,11 +31,12 @@ public class Server extends Thread{
                 serverThread.start();
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            LOGGER.error("Error in setting up the socket : \n" + e);
         }finally {
             try {
                 server.close();
             } catch (IOException e) {
+                LOGGER.error("Error in closing server socket : \n" + e);
                 e.printStackTrace();
             }
         }

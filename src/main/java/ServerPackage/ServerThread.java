@@ -3,14 +3,11 @@ package ServerPackage;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.Socket;
 
 /**
- * Since we want multi-threading support, ie. every instance to run independent from one another we use this class,
+ * Since we want multi-threading support, ie. every instance to run independent of one another we use this class,
  * to abstract out the work, and run the work on a separate thread
  */
 public class ServerThread extends Thread {
@@ -27,6 +24,11 @@ public class ServerThread extends Thread {
                 BufferedReader inputStream = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                 OutputStream writer = socket.getOutputStream();
         ){
+            //https://stackoverflow.com/questions/309424/how-do-i-read-convert-an-inputstream-into-a-string-in-java
+
+            String request = inputStream.readLine();
+
+            LOGGER.info("Received request : \n" + request);
             String tempHTML = "<html><head><title>Test App</title></head><body><h1>Test successful</h1></body></html>";
             String CRLF = "\n\r";
             String response =
