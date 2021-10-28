@@ -75,6 +75,7 @@ public class HTTPParser {
             /**
              * TODO We have to throw an HTTP Error saying that the request is invalid
              */
+            return;
         }
 
         String generatedRequest = requestToBeParsed;

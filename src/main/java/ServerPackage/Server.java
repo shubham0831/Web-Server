@@ -1,5 +1,8 @@
 package ServerPackage;
 
+import ServerPackage.Handlers.FindHandler;
+import ServerPackage.Handlers.Handler;
+import ServerPackage.Mapping.PathHandlerMap;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
@@ -12,12 +15,18 @@ public class Server extends Thread{
     private int port;
     private ServerSocket server;
     private static final Logger LOGGER = LogManager.getLogger(Server.class);
+    private PathHandlerMap map;
     private volatile boolean running;
 
     public Server (int port) throws IOException {
         this.port = port;
         this.server = new ServerSocket(port);
+        this.map = new PathHandlerMap();
         this.running = true;
+    }
+
+    public void addMapping (String path, Handler object){
+        map.addMapping(path, object);
     }
 
     @Override
@@ -27,7 +36,7 @@ public class Server extends Thread{
             while (running) {
                 Socket listenerSocket = server.accept();
                 LOGGER.info("Connection accepted : " + listenerSocket.getInetAddress());
-                ServerThread serverThread = new ServerThread(listenerSocket);
+                ServerThread serverThread = new ServerThread(listenerSocket, map);
                 serverThread.start();
             }
         } catch (IOException e) {
