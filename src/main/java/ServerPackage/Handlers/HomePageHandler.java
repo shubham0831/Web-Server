@@ -11,7 +11,7 @@ public class HomePageHandler implements Handler {
     public void handle(HTTPParser req, HttpWriter res) {
         try {
             ResponseGenerator responseGenerator = new ResponseGenerator();
-            String response = responseGenerator.generateResponse("HOME PAGE");
+            String response = responseGenerator.generateHomePageResponse("HOME");
 
             res.writeResponse(response);
         } catch (IOException e) {

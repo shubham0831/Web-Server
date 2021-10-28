@@ -15,8 +15,7 @@ public class FindHandler implements Handler{
     public void handle(HTTPParser req, HttpWriter res) {
         try {
             ResponseGenerator responseGenerator = new ResponseGenerator();
-            String response = responseGenerator.generateResponse("IN FIND");
-
+            String response = responseGenerator.generateGETResponse("Find", "/find", "Enter ASIN");
             res.writeResponse(response);
         } catch (IOException e) {
             e.printStackTrace();

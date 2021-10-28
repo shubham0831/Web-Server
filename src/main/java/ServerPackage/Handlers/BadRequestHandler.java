@@ -6,12 +6,12 @@ import ServerPackage.ServerUtils.HttpWriter;
 
 import java.io.IOException;
 
-public class ReviewSearchHandler implements Handler{
+public class BadRequestHandler implements Handler{
     @Override
     public void handle(HTTPParser req, HttpWriter res) {
         try {
             ResponseGenerator responseGenerator = new ResponseGenerator();
-            String response = responseGenerator.generateGETResponse("Review Search", "/reviewsearch", "Enter Search Item");
+            String response = responseGenerator.generateBADREQUESTResponse();
 
             res.writeResponse(response);
         } catch (IOException e) {

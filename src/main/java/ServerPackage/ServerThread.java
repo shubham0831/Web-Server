@@ -1,5 +1,7 @@
 package ServerPackage;
 
+import ServerPackage.Handlers.BadRequestHandler;
+import ServerPackage.Handlers.PageNotFoundHandler;
 import ServerPackage.Mapping.PathHandlerMap;
 import ServerPackage.ServerUtils.HTTPParser;
 import ServerPackage.ServerUtils.HttpWriter;
@@ -8,7 +10,7 @@ import org.apache.log4j.Logger;
 
 import java.io.*;
 import java.net.Socket;
-import java.util.HashMap;
+
 
 /**
  * Since we want multi-threading support, ie. every instance to run independent of one another we use this class,
@@ -33,6 +35,12 @@ public class ServerThread extends Thread {
             //https://stackoverflow.com/questions/309424/how-do-i-read-convert-an-inputstream-into-a-string-in-java
             HTTPParser httpParser = new HTTPParser(inputStream);
 
+            //if either the request map or the header map is empty, then it is a bad request and we generate that page
+            if (httpParser.getRequest().isEmpty() || httpParser.getHeader().isEmpty()){
+                LOGGER.info("Received incorrect request");
+                new BadRequestHandler().handle(httpParser, response);
+            }
+
 
             LOGGER.info("Server -> request type is : " + httpParser.getRequestType());
             LOGGER.info("Server -> request path is : " + httpParser.getRequestPath().strip());
@@ -41,35 +49,21 @@ public class ServerThread extends Thread {
             String path = httpParser.getRequestPath().strip();
 
             if (!map.contains(path)){
-                /**
-                 * TODO send HTTP response saying that the path is invalid
-                 */
                 LOGGER.info("Map does not contain the path : " + path);
+                new PageNotFoundHandler().handle(httpParser, response);
+
 
             } else{
                 LOGGER.info("Map contains the path : " + path);
                 map.getObject(path).handle(httpParser, response);
             }
 
-//            OutputStream writer = socket.getOutputStream();
-//
-//            String tempHTML = "<html><head><title>Test App</title></head><body><h1>Test successful</h1></body></html>";
-//            String CRLF = "\n\r";
-//            String response0 =
-//                    "HTTP/1.1 200 OK" + CRLF + //this is the status line of the response
-//                            "Content-Length: " +tempHTML.getBytes().length + CRLF + //the header, currently we only have the length
-//                            CRLF +
-//                            tempHTML + //actual html content
-//                            CRLF + CRLF;
-//
-//            writer.write(response0.getBytes());
-
         } catch (IOException e){
             LOGGER.error("Error in closing the reader or writer");
         } finally {
             try {
                 socket.close();
-                LOGGER.info("Socket closed ");
+                LOGGER.info("Socket closed \n");
             } catch (IOException e) {
                 LOGGER.error("Error in closing the socket");
                 e.printStackTrace();

@@ -27,7 +27,6 @@ public class HTTPParser {
         this.messageBody = new StringBuffer();
         this.request = new HashMap<>();
         generateFullRequest();
-//        LOGGER.info("Full message is : " + fullRequest);
         parseFullRequest();
     }
 
@@ -46,7 +45,12 @@ public class HTTPParser {
         BufferedReader reader = new BufferedReader(new StringReader(fullRequest));
 
         //the first line will always be the request, so we pass the first line to the generateRequest method
+        /**Getting the full request**/
         generateRequest(reader.readLine());
+        //if request is empty, then we do not execute rest of the code, and it sends and HTTP Error 400
+        if (request.isEmpty()){
+            return;
+        }
         LOGGER.info("Received request : " + request);
 
         //next to process the headers, we keep sending it in line by line till we encounter an empty line
@@ -54,6 +58,11 @@ public class HTTPParser {
         while (headerLine.length() > 0){
             generateHeader(headerLine);
             headerLine = reader.readLine();
+        }
+
+        //if header is empty, we do not execute rest of the code, and generate HTTP Error 400
+        if (header.isEmpty()){
+            return;
         }
 
         LOGGER.info("Parsed headers, total number is : " + header.size());
@@ -73,7 +82,7 @@ public class HTTPParser {
     private void generateRequest (String requestToBeParsed) {
         if (requestToBeParsed == null || requestToBeParsed.length() == 0){
             /**
-             * TODO We have to throw an HTTP Error saying that the request is invalid
+             * Since requestToBeParsed is empty, we just return
              */
             return;
         }
@@ -97,6 +106,7 @@ public class HTTPParser {
             /**
              * TODO throw HTTP Error saying that we have gotten invalid headers
              */
+            return;
         }
 
         header.put(headerLabel, headerBody);
@@ -125,5 +135,10 @@ public class HTTPParser {
     public String getRequestHttpVersion () {
         return request.get("httpVersion");
     }
+
+    public HashMap<String, String> getRequest () {
+        return request;
+    }
+
 
 }

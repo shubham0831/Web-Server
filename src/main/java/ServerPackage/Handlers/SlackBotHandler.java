@@ -11,7 +11,7 @@ public class SlackBotHandler implements Handler{
     public void handle(HTTPParser req, HttpWriter res) {
         try {
             ResponseGenerator responseGenerator = new ResponseGenerator();
-            String response = responseGenerator.generateResponse("IN SLACKBOT");
+            String response = responseGenerator.generateGETResponse("ChatBot", "/slackbot", "Enter Message");
 
             res.writeResponse(response);
         } catch (IOException e) {
