@@ -28,6 +28,5 @@ public class AmazonSearch {
         QAList qaList = new QAList("ISO-8859-1"); //creating QAList
 
         ProjectUI ui = new ProjectUI(reviewList, reviewFile, qaList, qaFile);
-        ui.startUI(); //starting ui
     }
 }

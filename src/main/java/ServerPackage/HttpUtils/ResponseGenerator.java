@@ -1,6 +1,8 @@
 package ServerPackage.HttpUtils;
 
-import ServerPackage.HttpUtils.HtmlUtils.HtmlGenerator;
+import ServerPackage.HtmlUtils.HtmlGenerator;
+
+import java.util.ArrayList;
 
 public class ResponseGenerator {
     public ResponseGenerator() {}
@@ -10,6 +12,13 @@ public class ResponseGenerator {
         String generatedHtml = htmlGenerator.getInputForm(title, action, textBoxLabel);
         String response = getResponse(generatedHtml, HttpConstants.OK);
 
+        return response;
+    }
+
+    public String generateInvertedIndexResponse (String title, String action, String textBoxLabel, ArrayList<String> searchResults){
+        HtmlGenerator htmlGenerator = new HtmlGenerator();
+        String generatedHtml = htmlGenerator.generateOutputList(title, action, textBoxLabel, searchResults);
+        String response = getResponse(generatedHtml, HttpConstants.OK);
         return response;
     }
 
@@ -33,6 +42,14 @@ public class ResponseGenerator {
         HtmlGenerator htmlGenerator = new HtmlGenerator();
         String generatedHtml = htmlGenerator.getBasicHTML("Error 400 Bad Request");
         String response = getResponse(generatedHtml, HttpConstants.BAD_REQUEST);
+
+        return response;
+    }
+
+    public String generateMETHODNOTALLOWEDResponse (){
+        HtmlGenerator htmlGenerator = new HtmlGenerator();
+        String generateHtml = htmlGenerator.getBasicHTML("Error 405 Method Not Allowed");
+        String response = getResponse(generateHtml, HttpConstants.NOT_ALLOWED);
 
         return response;
     }

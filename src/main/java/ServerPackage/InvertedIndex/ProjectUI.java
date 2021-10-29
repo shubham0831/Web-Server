@@ -6,6 +6,9 @@
 package ServerPackage.InvertedIndex;
 
 //this is the class to instantiate the UI and is where we will be making all our queries from
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Locale;
 import java.util.Scanner;
 
 
@@ -35,95 +38,63 @@ public class ProjectUI {
         qa.addToIndex(qaFile);
     }
 
-    public void startUI (){
-        //method to start our UI, and get commands
-        while (running){
-            getCommand();
-        }
-    }
-
-    private void getCommand (){
-        //method to take as input the user command and figure out what the user wants to do
-        System.out.println("Enter command, anything else will exit the code");
-
-        Scanner sc = new Scanner(System.in, "ISO-8859-1");
-        String command = sc.nextLine();
-        if (command.split(" ").length != 2){
-            //our commands have to be of 2 words
-            if (command.equals("exit")){
-                running = false;
-                return;
-            }
-//            throw new IllegalArgumentException("Invalid command, try again");
-            System.out.println("Invalid command, quitting program");
-            running = false;
-            return;
-        }
-        String instruction = command.split(" ")[0].strip(); //getting the instruction
-        String word = command.split(" ")[1].strip(); //getting the word
-
-        //if-else to figure out what command is for what and run appropriate method
-        if (instruction.equals("find")){
-            printAsin(word);
-            System.out.println("==========================================");
-        }
-        else if (instruction.equals("reviewsearch")){
-            reviewSearch(word);
-            System.out.println("==========================================");
-        }
-        else if (instruction.equals("qasearch")){
-            qaSearch(word);
-            System.out.println("==========================================");
-        }
-        else if (instruction.equals("reviewpartialsearch")){
-            reviewPartialSearch(word);
-            System.out.println("==========================================");
-        }
-        else if (instruction.equals("qapartialsearch")){
-            qaPartialSearch(word);
-            System.out.println("==========================================");
-        }
-        else {
-            //if command is anything else, we stop running our program
-            running = false;
-        }
-        //end of if-else
-        return;
-    }
-
-
-    private void printAsin (String word){
+    public ArrayList<String> getAsin (String word){
+        word = word.toLowerCase();
         //method to print the items having the given asin key
-//        System.out.println("reviews : ");
-//        r.printAsin(word.toLowerCase());
-        r.findAsin(word);
-//        System.out.println("QAs : ");
-//        qa.printAsin(word.toLowerCase());
-        qa.findAsin(word);
+        ArrayList<String> reviewAsin = r.findAsin(word);
+        System.out.println("----");
+        ArrayList<String> qsAsin = qa.findAsin(word);
+
+        //we add all the results to this arraylist
+        ArrayList<String> allAsin = new ArrayList<>();
+
+        //combining both the results
+        for (String asin : reviewAsin){
+            allAsin.add(asin);
+        }
+
+        for (String asin : qsAsin){
+            allAsin.add(asin);
+        }
+
+        return allAsin;
+
     }
 
-    private void reviewSearch (String word){
+    public ArrayList<String> getReviewSearch (String word){
         //method to print the items having the given word in the review index
-        r.printKey(word);
-//        r.searchIndex(word);
+        return r.searchIndex(word);
     }
 
-    private void qaSearch (String word){
+    public ArrayList<String> getQaSearch (String word){
         //method to print the items having the given word in the qa index
-        qa.printKey(word);
-//        qa.searchIndex(word);
+        return qa.searchIndex(word);
     }
 
-    private void reviewPartialSearch (String word){
+    public ArrayList<String> getReviewPartialSearch (String word){
         //method to print the items having the given partial word in the review index
-        r.printPartialKey(word);
-//        r.partialSearchIndex(word);
+        HashSet<String> partialSearchResult = r.partialSearchIndex(word);
+
+        ArrayList<String> partialSearchResultList = new ArrayList<>();
+
+        for (String result : partialSearchResult){
+            partialSearchResultList.add(result);
+        }
+
+        return partialSearchResultList;
     }
 
-    private void qaPartialSearch (String word){
+    public ArrayList<String> getQaPartialSearch (String word){
         //method to print the items having the given partial word in the qa index
-        qa.printPartialKey(word);
-//        qa.partialSearchIndex(word);
+        HashSet<String> partialSearchResult = qa.partialSearchIndex(word);
+
+        ArrayList<String> partialSearchResultList = new ArrayList<>();
+
+        for (String result : partialSearchResult){
+            partialSearchResultList.add(result);
+        }
+
+        return partialSearchResultList;
     }
 
 

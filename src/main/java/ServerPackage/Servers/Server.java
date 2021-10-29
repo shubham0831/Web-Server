@@ -1,8 +1,8 @@
-package ServerPackage;
+package ServerPackage.Servers;
 
-import ServerPackage.Handlers.FindHandler;
 import ServerPackage.Handlers.Handler;
 import ServerPackage.Mapping.PathHandlerMap;
+import ServerPackage.ServerThreads.ServerThread;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
@@ -12,11 +12,11 @@ import java.net.Socket;
 
 
 public class Server extends Thread{
-    private int port;
-    private ServerSocket server;
+    protected int port;
+    protected ServerSocket server;
     private static final Logger LOGGER = LogManager.getLogger(Server.class);
-    private PathHandlerMap map;
-    private volatile boolean running;
+    protected PathHandlerMap map;
+    protected volatile boolean running;
 
     public Server (int port) throws IOException {
         this.port = port;
@@ -31,7 +31,6 @@ public class Server extends Thread{
 
     @Override
     public void run() {
-
         try {
             while (running) {
                 Socket listenerSocket = server.accept();
@@ -49,6 +48,5 @@ public class Server extends Thread{
                 e.printStackTrace();
             }
         }
-
     }
 }

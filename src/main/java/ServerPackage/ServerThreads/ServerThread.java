@@ -1,7 +1,10 @@
-package ServerPackage;
+package ServerPackage.ServerThreads;
 
 import ServerPackage.Handlers.BadRequestHandler;
+import ServerPackage.Handlers.FindHandler;
 import ServerPackage.Handlers.PageNotFoundHandler;
+import ServerPackage.Handlers.ReviewSearchHandler;
+import ServerPackage.InvertedIndex.ProjectUI;
 import ServerPackage.Mapping.PathHandlerMap;
 import ServerPackage.ServerUtils.HTTPParser;
 import ServerPackage.ServerUtils.HttpWriter;
@@ -20,10 +23,15 @@ public class ServerThread extends Thread {
     private Socket socket;
     private PathHandlerMap map;
     private static final Logger LOGGER = LogManager.getLogger(ServerThread.class);
+    private ProjectUI invertedIndex;
 
     public ServerThread (Socket socket, PathHandlerMap map){
         this.socket = socket;
         this.map = map;
+    }
+
+    public void setInvertedIndex (ProjectUI invertedIndex) {
+        this.invertedIndex = invertedIndex;
     }
 
     @Override
@@ -55,7 +63,21 @@ public class ServerThread extends Thread {
 
             } else{
                 LOGGER.info("Map contains the path : " + path);
-                map.getObject(path).handle(httpParser, response);
+                /**
+                 * Not every task needs an inverted index, so we only send the inverted index to the
+                 * handlers that actually need it
+                 */
+                if (path.equals("/find")){
+                    FindHandler findHandler = (FindHandler) map.getObject(path);
+                    findHandler.initializeIndex(invertedIndex);
+                    findHandler.handle(httpParser, response);
+                } else if (path.equals("/reviewsearch")){
+                    ReviewSearchHandler searchHandler = (ReviewSearchHandler) map.getObject(path);
+                    searchHandler.initializeIndex(invertedIndex);
+                    searchHandler.handle(httpParser, response);
+                } else {
+                    map.getObject(path).handle(httpParser, response);
+                }
             }
 
         } catch (IOException e){
