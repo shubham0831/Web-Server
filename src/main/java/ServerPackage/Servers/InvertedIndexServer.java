@@ -1,6 +1,6 @@
 package ServerPackage.Servers;
 
-import ServerPackage.InvertedIndex.ProjectUI;
+import ServerPackage.InvertedIndex.InvertedIndexUI;
 import ServerPackage.InvertedIndex.QAList;
 import ServerPackage.InvertedIndex.ReviewList;
 import ServerPackage.ServerThreads.ServerThread;
@@ -12,7 +12,7 @@ import java.net.Socket;
 
 public class InvertedIndexServer extends Server{
 
-    private ProjectUI invertedIndex;
+    private InvertedIndexUI invertedIndex;
     private static final Logger LOGGER = LogManager.getLogger(Server.class);
 
     public InvertedIndexServer(int port) throws IOException {
@@ -31,7 +31,7 @@ public class InvertedIndexServer extends Server{
 
         ReviewList reviewList = new ReviewList("ISO-8859-1"); //creating ReviewList
         QAList qaList = new QAList("ISO-8859-1"); //creating QAList
-        this.invertedIndex = new ProjectUI(reviewList, reviewFile, qaList, qaFile);
+        this.invertedIndex = new InvertedIndexUI(reviewList, reviewFile, qaList, qaFile);
         LOGGER.info("Inverted index is initialized and server is up and ready...");
     }
 

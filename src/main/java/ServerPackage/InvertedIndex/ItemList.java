@@ -66,7 +66,13 @@ public abstract class ItemList {
             //if query contains alphanumerics then it is not a valid query
             throw new InvalidParameterException("Key should contain only alphanumerics");
         }
-        return index.find(word); //not checking for null and returning empty arrayList if doc doesn't contain word since inverted index will do that
+
+        ArrayList<String> output = index.find(word);
+        for (int i = 0; i < output.size(); i++){
+            String id = output.get(i);
+            output.set(i, idToItems.get(id));
+        }
+        return output; //not checking for null and returning empty arrayList if doc doesn't contain word since inverted index will do that
     }
 
     public HashSet<String> partialSearchIndex (String word){

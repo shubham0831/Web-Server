@@ -72,7 +72,7 @@ public class HtmlGenerator {
         //have to set border bottom for the last element, we do that manually over here
         int lastIndex = output.size()-1;
         String lastEl = output.get(lastIndex);
-        lastEl = "<li style=\"border: solid; border-bottom: none;\">" + lastEl + "</li>";
+        lastEl = "<li style=\"border: solid; border-bottom: solid;\">" + lastEl + "</li>";
         output.set(lastIndex, lastEl);
 
         String outputContainer =
@@ -96,6 +96,20 @@ public class HtmlGenerator {
         String head = generateHead(title);
         String form = generateForm(action, textBoxLabel);
         String output = generateOutputContainer(searchResults);
+        String combinedOutput = form + output;
+        String body = generateBody(combinedOutput);
+        String html = head + body;
+        return html;
+    }
+
+    public String generateNoItemsFoundHtml(String title, String action, String textBoxLabel, String text) {
+        String head = generateHead(title);
+        String form = generateForm(action, textBoxLabel);
+
+        //sending a new ArrayList with just one response, doing this so that we can then use the generateOutputContainer method
+        ArrayList<String> outputList = new ArrayList<>();
+        outputList.add(text);
+        String output = generateOutputContainer(outputList);
         String combinedOutput = form + output;
         String body = generateBody(combinedOutput);
         String html = head + body;

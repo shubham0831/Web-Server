@@ -22,6 +22,13 @@ public class ResponseGenerator {
         return response;
     }
 
+    public String generateNoItemFoundResponse(String title, String action, String textBoxLabel, String text) {
+        HtmlGenerator htmlGenerator = new HtmlGenerator();
+        String generatedHtml = htmlGenerator.generateNoItemsFoundHtml(title, action, textBoxLabel, text);
+        String response = getResponse(generatedHtml, HttpConstants.OK);
+        return response;
+    }
+
     public String generateHomePageResponse (String text){
         HtmlGenerator htmlGenerator = new HtmlGenerator();
         String generatedHtml = htmlGenerator.getBasicHTML(text);
@@ -68,8 +75,4 @@ public class ResponseGenerator {
 
         return response;
     }
-
-
-
-
 }

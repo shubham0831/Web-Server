@@ -12,7 +12,7 @@ import java.util.Locale;
 import java.util.Scanner;
 
 
-public class ProjectUI {
+public class InvertedIndexUI {
     //will be needing a ReviewList, the reviewFile, a QAList and the qaFile
     //when user calls creates this class, that is when we actually populate our index
     private ReviewList r;
@@ -22,7 +22,7 @@ public class ProjectUI {
 
     private boolean running;
 
-    public ProjectUI (ReviewList r, String reviewFile, QAList qa, String qaFile){
+    public InvertedIndexUI(ReviewList r, String reviewFile, QAList qa, String qaFile){
         //instantiating the variables and creating our invertedIndex
         this.r = r;
         this.qa = qa;
@@ -63,6 +63,7 @@ public class ProjectUI {
 
     public ArrayList<String> getReviewSearch (String word){
         //method to print the items having the given word in the review index
+        ArrayList<String> output = r.searchIndex(word);
         return r.searchIndex(word);
     }
 

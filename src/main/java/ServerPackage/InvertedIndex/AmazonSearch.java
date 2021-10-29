@@ -13,10 +13,6 @@
 
 package ServerPackage.InvertedIndex;
 
-import java.security.InvalidParameterException;
-import java.util.HashMap;
-import java.util.HashSet;
-
 public class AmazonSearch {
 
     public static void main(String[] args) {
@@ -27,6 +23,6 @@ public class AmazonSearch {
         ReviewList reviewList = new ReviewList("ISO-8859-1"); //creating ReviewList
         QAList qaList = new QAList("ISO-8859-1"); //creating QAList
 
-        ProjectUI ui = new ProjectUI(reviewList, reviewFile, qaList, qaFile);
+        InvertedIndexUI ui = new InvertedIndexUI(reviewList, reviewFile, qaList, qaFile);
     }
 }

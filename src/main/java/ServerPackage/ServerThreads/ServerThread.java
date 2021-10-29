@@ -4,7 +4,7 @@ import ServerPackage.Handlers.BadRequestHandler;
 import ServerPackage.Handlers.FindHandler;
 import ServerPackage.Handlers.PageNotFoundHandler;
 import ServerPackage.Handlers.ReviewSearchHandler;
-import ServerPackage.InvertedIndex.ProjectUI;
+import ServerPackage.InvertedIndex.InvertedIndexUI;
 import ServerPackage.Mapping.PathHandlerMap;
 import ServerPackage.ServerUtils.HTTPParser;
 import ServerPackage.ServerUtils.HttpWriter;
@@ -23,14 +23,14 @@ public class ServerThread extends Thread {
     private Socket socket;
     private PathHandlerMap map;
     private static final Logger LOGGER = LogManager.getLogger(ServerThread.class);
-    private ProjectUI invertedIndex;
+    private InvertedIndexUI invertedIndex;
 
     public ServerThread (Socket socket, PathHandlerMap map){
         this.socket = socket;
         this.map = map;
     }
 
-    public void setInvertedIndex (ProjectUI invertedIndex) {
+    public void setInvertedIndex (InvertedIndexUI invertedIndex) {
         this.invertedIndex = invertedIndex;
     }
 
