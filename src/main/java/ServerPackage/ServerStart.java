@@ -1,5 +1,6 @@
 package ServerPackage;
 
+import ServerPackage.Config.ConfigurationManager;
 import ServerPackage.Handlers.FindHandler;
 import ServerPackage.Handlers.HomePageHandler;
 import ServerPackage.Handlers.ReviewSearchHandler;
@@ -25,13 +26,19 @@ public class ServerStart {
 
     private static final Logger LOGGER = LogManager.getLogger(ServerStart.class);
 
-    public static void main (String[] args) throws SlackApiException, IOException {
-
+    public static void main (String[] args){
         BasicConfigurator.configure();
-        int invertedIndexPort = 8080;
-        int slackBotPort = 9090;
 
-        String token = "Not yet";
+        ConfigurationManager configurationManager = new ConfigurationManager("/home/shubham/IdeaProjects/project3-shubham0831/configuration.json");
+
+        int invertedIndexPort = configurationManager.getIndexPort();
+        int slackBotPort = configurationManager.getSlackBotPort();
+
+        String token = configurationManager.getSlackToken();
+
+        System.out.println(invertedIndexPort);
+        System.out.println(slackBotPort);
+        System.out.println(token);
 
         LOGGER.info("Inverted Index Server Starting at port : " + invertedIndexPort);
         LOGGER.info("Slack Bot Server Starting at port : " + slackBotPort);
@@ -64,15 +71,7 @@ public class ServerStart {
             invertedIndexServer.start();
         });
 
-//        slackBotStartThread.start();
-//        invertedIndexStartThread.start();
-
-        Slack chat = Slack.getInstance();
-        MethodsClient methods = chat.methods(token);
-        ChatPostMessageRequest request = ChatPostMessageRequest.builder().channel("#cs601-project3").text("test test").build();
-//        methods.chatDelete()
-        ChatPostMessageResponse  slackResponse = methods.chatPostMessage(request);
-        System.out.println(request);
-
+        slackBotStartThread.start();
+        invertedIndexStartThread.start();
     }
 }
