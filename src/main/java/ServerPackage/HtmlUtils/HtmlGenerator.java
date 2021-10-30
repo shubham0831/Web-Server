@@ -33,7 +33,7 @@ public class HtmlGenerator {
 
     private String generateHead (String title){
         String head =
-                "<html style = \"height: 100%; width: 100%\"> <head> <title>" + title + "</title></head>";
+                "<html style = \"height: 100%; width: 100%\"> <head> <link rel=\"shortcut icon\" href=\"#\">\n <title>" + title + "</title></head>";
         return head;
     }
 
@@ -102,7 +102,7 @@ public class HtmlGenerator {
         return html;
     }
 
-    public String generateNoItemsFoundHtml(String title, String action, String textBoxLabel, String text) {
+    public String generateSingleItemResponse(String title, String action, String textBoxLabel, String text) {
         String head = generateHead(title);
         String form = generateForm(action, textBoxLabel);
 

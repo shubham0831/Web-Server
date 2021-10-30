@@ -1,5 +1,6 @@
 package ServerPackage.Servers;
 
+import ServerPackage.InvertedIndex.InvertedIndex;
 import ServerPackage.InvertedIndex.InvertedIndexUI;
 import ServerPackage.InvertedIndex.QAList;
 import ServerPackage.InvertedIndex.ReviewList;
@@ -13,7 +14,7 @@ import java.net.Socket;
 public class InvertedIndexServer extends Server{
 
     private InvertedIndexUI invertedIndex;
-    private static final Logger LOGGER = LogManager.getLogger(Server.class);
+    private static final Logger LOGGER = LogManager.getLogger(InvertedIndexServer.class);
 
     public InvertedIndexServer(int port) throws IOException {
         super(port);

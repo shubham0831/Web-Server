@@ -45,7 +45,7 @@ public class ReviewSearchHandler implements Handler{
 
                     if (results.size() == 0) {
                         //since we did not find any result we have to send a different response
-                        String response = responseGenerator.generateNoItemFoundResponse("Review Search", "/reviewsearch", "Enter Search Item", "No item found");
+                        String response = responseGenerator.generateSingleLineResponse("Review Search", "/reviewsearch", "Enter Search Item", "No item found");
                         res.writeResponse(response);
                         return;
                     }
@@ -53,7 +53,7 @@ public class ReviewSearchHandler implements Handler{
                     String response = responseGenerator.generateInvertedIndexResponse("Review Search", "/reviewsearch", "Enter Search Item", results);
                     res.writeResponse(response);
                 }catch (InvalidParameterException e){
-                    String response = responseGenerator.generateNoItemFoundResponse("Review Search", "/reviewsearch", "Enter Search Item", "Invalid Argument");
+                    String response = responseGenerator.generateSingleLineResponse("Review Search", "/reviewsearch", "Enter Search Item", "Invalid Argument");
                     res.writeResponse(response);
                     return;
                 }

@@ -44,7 +44,7 @@ public class FindHandler implements Handler{
 
                     if (results.size() == 0){
                         //since we did not find any result we have to send a different response
-                        String response = responseGenerator.generateNoItemFoundResponse("Find", "/find", "Enter Asin", "No item found");
+                        String response = responseGenerator.generateSingleLineResponse("Find", "/find", "Enter Asin", "No item found");
                         res.writeResponse(response);
                         return;
                     }
@@ -53,7 +53,7 @@ public class FindHandler implements Handler{
 
                     res.writeResponse(response);
                 }catch (InvalidParameterException e){
-                    String response = responseGenerator.generateNoItemFoundResponse("Find", "/find", "Enter Asin", "Invalid Argument");
+                    String response = responseGenerator.generateSingleLineResponse("Find", "/find", "Enter Asin", "Invalid Argument");
                     res.writeResponse(response);
                     return;
                 }

@@ -12,7 +12,7 @@ import java.util.HashMap;
 
 public class HTTPParser {
 
-    private static final Logger LOGGER = LogManager.getLogger(ServerThread.class);
+    private static final Logger LOGGER = LogManager.getLogger(HTTPParser.class);
 
     private InputStream inputStream;
     private String fullRequest;
@@ -122,7 +122,12 @@ public class HTTPParser {
 
     public String cleanBody (String body){
         String[] splitBody = body.split("=",2);
-        return splitBody[1].strip();
+        String uncleanBody = splitBody[1].strip();
+        String[] brokenDownBody = uncleanBody.split("\\+");
+        String cleanBody = String.join(" ", brokenDownBody);
+
+        LOGGER.info("Body after cleaning is : " + cleanBody);
+        return cleanBody;
     }
 
     private StringBuffer generateBody (String bodyLine, StringBuffer messageBody) {

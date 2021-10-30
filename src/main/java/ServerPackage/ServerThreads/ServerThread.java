@@ -1,13 +1,11 @@
 package ServerPackage.ServerThreads;
 
-import ServerPackage.Handlers.BadRequestHandler;
-import ServerPackage.Handlers.FindHandler;
-import ServerPackage.Handlers.PageNotFoundHandler;
-import ServerPackage.Handlers.ReviewSearchHandler;
+import ServerPackage.Handlers.*;
 import ServerPackage.InvertedIndex.InvertedIndexUI;
 import ServerPackage.Mapping.PathHandlerMap;
 import ServerPackage.ServerUtils.HTTPParser;
 import ServerPackage.ServerUtils.HttpWriter;
+import com.slack.api.methods.MethodsClient;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
@@ -24,6 +22,7 @@ public class ServerThread extends Thread {
     private PathHandlerMap map;
     private static final Logger LOGGER = LogManager.getLogger(ServerThread.class);
     private InvertedIndexUI invertedIndex;
+    private MethodsClient methods;
 
     public ServerThread (Socket socket, PathHandlerMap map){
         this.socket = socket;
@@ -33,6 +32,11 @@ public class ServerThread extends Thread {
     public void setInvertedIndex (InvertedIndexUI invertedIndex) {
         this.invertedIndex = invertedIndex;
     }
+
+    public void setSlackBot(MethodsClient methods){
+        this.methods = methods;
+    }
+
 
     @Override
     public void run() {
@@ -59,8 +63,6 @@ public class ServerThread extends Thread {
             if (!map.contains(path)){
                 LOGGER.info("Map does not contain the path : " + path);
                 new PageNotFoundHandler().handle(httpParser, response);
-
-
             } else{
                 LOGGER.info("Map contains the path : " + path);
                 /**
@@ -75,6 +77,10 @@ public class ServerThread extends Thread {
                     ReviewSearchHandler searchHandler = (ReviewSearchHandler) map.getObject(path);
                     searchHandler.initializeIndex(invertedIndex);
                     searchHandler.handle(httpParser, response);
+                } else if (path.equals("/slackbot")){
+                    SlackBotHandler slackBotHandler = (SlackBotHandler) map.getObject(path);
+                    slackBotHandler.initializeMethod(methods);
+                    slackBotHandler.handle(httpParser, response);
                 } else {
                     map.getObject(path).handle(httpParser, response);
                 }
